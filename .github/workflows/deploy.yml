@@ -14,7 +14,6 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 10
           run_install: true
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -23,12 +22,18 @@ jobs:
           cache: pnpm
       - name: Build VuePress site
         run: pnpm docs:build
-      - name: Rsync deploy dist to server
-        uses: appleboy/rsync-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: docs/.vuepress/dist
-          target: ${{ secrets.TARGET_DIR }}
-          args: --delete
+      # 配置ssh私钥，给rsync使用
+      - name: Prepare SSH config
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          # 信任服务器主机指纹，跳过交互式确认
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+      # 原生rsync上传
+      - name: Rsync upload static files
+        run: |
+          rsync -avz --delete \
+            -e "ssh -i ~/.ssh/deploy_key" \
+            ./docs/.vuepress/dist/ \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.TARGET_DIR }}/
