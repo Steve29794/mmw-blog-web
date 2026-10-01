@@ -8,8 +8,8 @@ config:
     effect: tint-plate
     effectConfig: 200
     hero:
-      name: Steve29794
-      tagline: 全栈视界，由我定义
+      name: 妙妙屋
+      tagline: 好玩的事物等你发现
       text: Code · Create · Conquer
       actions:
         - theme: brand
@@ -48,6 +48,6 @@ config:
 ---
 
 <CardGrid>
-  <LinkCard icon="mdi:github" title="仓库地址" href="/">点击进入此网站 GITHUB 仓库地址</LinkCard>
-  <LinkCard icon="logos:github-actions" title="Steve29794-github" href="/">点击进入我的 GITHUB 地址</LinkCard>
+  <LinkCard icon="mdi:github" title="仓库地址" href="https://github.com/Steve29794/mmw-blog-web">点击进入此网站 GITHUB 仓库地址</LinkCard>
+  <LinkCard icon="logos:github-actions" title="Steve29794-github" href="https://github.com/Steve29794">点击进入我的 GITHUB 地址</LinkCard>
 </CardGrid>
